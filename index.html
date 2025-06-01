@@ -17,6 +17,22 @@
             color: #eee;
         }
 
+        #startBtn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            font-size: 24px;
+            background: #ff6699;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(255, 102, 153, 0.8);
+        }
+
         .container {
             position: relative;
             width: 100vw;
@@ -31,11 +47,8 @@
             font-size: 27px;
             font-weight: 600;
             white-space: nowrap;
-            /* Màu nhẹ nhàng và bóng mờ tinh tế */
             color: #ffccd5;
-            text-shadow:
-                0 0 6px rgba(255, 204, 213, 0.7),
-                0 0 12px rgba(255, 204, 213, 0.5);
+            text-shadow: 0 0 6px rgba(255, 204, 213, 0.7), 0 0 12px rgba(255, 204, 213, 0.5);
             animation: fall linear infinite;
             user-select: none;
             pointer-events: none;
@@ -58,9 +71,7 @@
             position: absolute;
             font-size: 24px;
             color: #ff4567;
-            text-shadow:
-                0 0 6px rgba(255, 69, 103, 0.8),
-                0 0 12px rgba(255, 69, 103, 0.5);
+            text-shadow: 0 0 6px rgba(255, 69, 103, 0.8), 0 0 12px rgba(255, 69, 103, 0.5);
             animation: fall linear infinite;
             user-select: none;
             pointer-events: none;
@@ -109,9 +120,18 @@
 </head>
 
 <body>
+    <button id="startBtn">💖 Bắt đầu 💖</button>
+    <audio id="bgMusic" loop muted>
+        <source src="Indila - Love Story (Lyrics).mp3" type="audio/mpeg" />
+        Trình duyệt không hỗ trợ phát nhạc.
+    </audio>
+
+
     <div class="container" id="container"></div>
 
     <script>
+        const startBtn = document.getElementById("startBtn");
+        const music = document.getElementById("bgMusic");
         const container = document.getElementById("container");
 
         const messages = [
@@ -126,92 +146,72 @@
             "Trái tim anh đã khóa, và em là chiếc chìa khóa.",
             "Yêu em là điều đúng đắn nhất.", "Anh không muốn mất em."
         ];
-
         const images = [
             "anh1.jpg", "anh2.jpg", "anh3.jpg", "anh4.jpg", "anh5.jpg", "anh6.jpg", "anh7.jpg", "anh8.jpg", "anh9.jpg", "anh10.jpg",
             "anh11.jpg", "anh12.jpg", "anh13.jpg", "anh14.jpg", "anh15.jpg", "anh16.jpg", "anh17.jpg", "anh18.jpg", "anh19.jpg", "anh20.jpg",
             "anh21.jpg", "anh22.jpg", "anh23.jpg", "anh24.jpg", "anh25.jpg", "anh26.jpg", "anh27.jpg", "anh28.jpg", "anh29.jpg",
         ];
+        startBtn.addEventListener("click", () => {
+            music.muted = false;
+            music.play();
+            startBtn.style.display = "none";
 
-        // Tạo sao lung linh nền đen
-        for (let i = 0; i < 120; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.top = `${Math.random() * 100}vh`;
-            star.style.left = `${Math.random() * 100}vw`;
-            star.style.animationDuration = `${2 + Math.random() * 3}s`;
-            star.style.opacity = 0.1 + Math.random() * 0.3;
-            document.body.appendChild(star);
-        }
+            // Tạo sao lung linh nền đen
+            for (let i = 0; i < 120; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.animationDuration = `${2 + Math.random() * 3}s`;
+                star.style.opacity = 0.1 + Math.random() * 0.3;
+                document.body.appendChild(star);
+            }
 
-        // Tạo các câu chữ rơi
-        for (let i = 0; i < 80; i++) {
-            const el = document.createElement("div");
-            el.className = "message";
-            el.textContent = messages[Math.floor(Math.random() * messages.length)];
+            // Tạo chữ rơi
+            for (let i = 0; i < 80; i++) {
+                const el = document.createElement("div");
+                el.className = "message";
+                el.textContent = messages[Math.floor(Math.random() * messages.length)];
+                el.style.left = `${Math.random() * 100}vw`;
+                el.style.top = `${Math.random() * 50}vh`;
+                el.style.animationDelay = `${Math.random() * 8}s`;
+                el.style.animationDuration = `${30 + Math.random() * 15}s`;
+                el.style.transform = `translateZ(${-Math.random() * 700}px)`;
+                container.appendChild(el);
+            }
 
-            const left = Math.random() * 100;
-            const top = Math.random() * 50;
-            const z = -Math.random() * 700;
-            const delay = Math.random() * 8;
-            const duration = 30 + Math.random() * 15;
+            // Tạo ảnh rơi
+            for (let i = 0; i < images.length; i++) {
+                const img = document.createElement("img");
+                img.className = "falling-image";
+                img.src = images[i];
+                img.style.left = `${Math.random() * 100}vw`;
+                img.style.top = `${Math.random() * 50}vh`;
+                img.style.animationDelay = `${Math.random() * 8}s`;
+                img.style.animationDuration = `${30 + Math.random() * 15}s`;
+                img.style.transform = `translateZ(${-Math.random() * 700}px)`;
+                container.appendChild(img);
+            }
 
-            el.style.left = `${left}vw`;
-            el.style.top = `${top}vh`;
-            el.style.animationDelay = `${delay}s`;
-            el.style.animationDuration = `${duration}s`;
-            el.style.transform = `translateZ(${z}px)`;
+            // Tạo tim rơi
+            for (let i = 0; i < 60; i++) {
+                const heart = document.createElement("div");
+                heart.className = "falling-heart";
+                heart.textContent = "❤️";
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.top = `${Math.random() * 50}vh`;
+                heart.style.animationDelay = `${Math.random() * 8}s`;
+                heart.style.animationDuration = `${25 + Math.random() * 20}s`;
+                heart.style.transform = `translateZ(${-Math.random() * 700}px)`;
+                container.appendChild(heart);
+            }
 
-            container.appendChild(el);
-        }
-
-        // Tạo các hình ảnh rơi
-        for (let i = 0; i < images.length; i++) {
-            const img = document.createElement("img");
-            img.className = "falling-image";
-            img.src = images[i];
-
-            const left = Math.random() * 100;
-            const top = Math.random() * 50;
-            const z = -Math.random() * 700;
-            const delay = Math.random() * 8;
-            const duration = 30 + Math.random() * 15;
-
-            img.style.left = `${left}vw`;
-            img.style.top = `${top}vh`;
-            img.style.animationDelay = `${delay}s`;
-            img.style.animationDuration = `${duration}s`;
-            img.style.transform = `translateZ(${z}px)`;
-
-            container.appendChild(img);
-        }
-
-        // Tạo hiệu ứng tim rơi
-        for (let i = 0; i < 60; i++) {
-            const heart = document.createElement("div");
-            heart.className = "falling-heart";
-            heart.textContent = "❤️";
-
-            const left = Math.random() * 100;
-            const top = Math.random() * 50;
-            const z = -Math.random() * 700;
-            const delay = Math.random() * 8;
-            const duration = 25 + Math.random() * 20;
-
-            heart.style.left = `${left}vw`;
-            heart.style.top = `${top}vh`;
-            heart.style.animationDelay = `${delay}s`;
-            heart.style.animationDuration = `${duration}s`;
-            heart.style.transform = `translateZ(${z}px)`;
-
-            container.appendChild(heart);
-        }
-
-        // Cho phép xoay theo chuột
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 30; // -15 đến 15 độ
-            const y = (e.clientY / window.innerHeight - 0.5) * 30; // -15 đến 15 độ
-            container.style.transform = `rotateX(${y}deg) rotateY(${-x}deg)`;
+            // Xoay theo chuột
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 30;
+                const y = (e.clientY / window.innerHeight - 0.5) * 30;
+                container.style.transform = `rotateX(${y}deg) rotateY(${-x}deg)`;
+            });
         });
     </script>
 </body>
