@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Tỏ tình rơi 3D toàn màn hình</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            perspective: 1200px;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eee;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+            transform: rotateX(30deg) rotateZ(-10deg);
+            transition: transform 0.1s linear;
+        }
+
+        .message {
+            position: absolute;
+            font-size: 20px;
+            font-weight: 600;
+            white-space: nowrap;
+            /* Màu nhẹ nhàng và bóng mờ tinh tế */
+            color: #ffccd5;
+            text-shadow:
+                0 0 6px rgba(255, 204, 213, 0.7),
+                0 0 12px rgba(255, 204, 213, 0.5);
+            animation: fall linear infinite;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .falling-image {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+            animation: fall linear infinite;
+            user-select: none;
+            pointer-events: none;
+            object-fit: cover;
+            filter: drop-shadow(0 0 4px rgba(255, 182, 193, 0.7));
+        }
+
+        .falling-heart {
+            position: absolute;
+            font-size: 24px;
+            color: #ff4567;
+            text-shadow:
+                0 0 6px rgba(255, 69, 103, 0.8),
+                0 0 12px rgba(255, 69, 103, 0.5);
+            animation: fall linear infinite;
+            user-select: none;
+            pointer-events: none;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-15vh) translateZ(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(120vh) translateZ(-1000px);
+                opacity: 0;
+            }
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 2px #fff);
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container"></div>
+
+    <script>
+        const container = document.getElementById("container");
+
+        const messages = [
+            "Anh yêu em hơn cả lời nói!", "Em là định mệnh của anh.", "Chỉ cần em gật đầu là anh tới ngay.",
+            "Gặp em là điều tuyệt vời nhất đời anh.", "Từ khi có em, mọi thứ đều rực rỡ.",
+            "Anh chỉ hướng về em thôi.", "Mỗi lần nhìn em tim anh loạn nhịp.",
+            "Anh nguyện làm tất cả vì em.", "Nếu có 1 điều ước, anh ước được bên em mãi.",
+            "Chúng ta sinh ra là để dành cho nhau.", "Anh muốn già đi cùng em.",
+            "Tình yêu anh trao em là mãi mãi.", "Em là ánh sáng của đời anh.",
+            "Anh không cần gì nhiều, chỉ cần em.", "Anh luôn hướng về em.",
+            "Anh yêu em bằng cả trái tim mình.", "Chỉ cần em ở đây là đủ.",
+            "Trái tim anh đã khóa, và em là chiếc chìa khóa.",
+            "Yêu em là điều đúng đắn nhất.", "Anh không muốn mất em."
+        ];
+
+        const images = [
+            "anh1.jpg", "anh2.jpg", "anh3.jpg", "anh4.jpg", "anh5.jpg", "anh6.jpg", "anh7.jpg", "anh8.jpg", "anh9.jpg", "anh10.jpg",
+            "anh11.jpg", "anh12.jpg", "anh13.jpg", "anh14.jpg", "anh15.jpg", "anh16.jpg", "anh17.jpg", "anh18.jpg", "anh19.jpg", "anh20.jpg",
+            "anh21.jpg", "anh22.jpg", "anh23.jpg", "anh24.jpg", "anh25.jpg", "anh26.jpg", "anh27.jpg", "anh28.jpg", "anh29.jpg",
+        ];
+
+        // Tạo sao lung linh nền đen
+        for (let i = 0; i < 120; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.animationDuration = `${2 + Math.random() * 3}s`;
+            star.style.opacity = 0.1 + Math.random() * 0.3;
+            document.body.appendChild(star);
+        }
+
+        // Tạo các câu chữ rơi
+        for (let i = 0; i < 80; i++) {
+            const el = document.createElement("div");
+            el.className = "message";
+            el.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+            const left = Math.random() * 100;
+            const top = Math.random() * 50;
+            const z = -Math.random() * 700;
+            const delay = Math.random() * 8;
+            const duration = 30 + Math.random() * 15;
+
+            el.style.left = `${left}vw`;
+            el.style.top = `${top}vh`;
+            el.style.animationDelay = `${delay}s`;
+            el.style.animationDuration = `${duration}s`;
+            el.style.transform = `translateZ(${z}px)`;
+
+            container.appendChild(el);
+        }
+
+        // Tạo các hình ảnh rơi
+        for (let i = 0; i < images.length; i++) {
+            const img = document.createElement("img");
+            img.className = "falling-image";
+            img.src = images[i];
+
+            const left = Math.random() * 100;
+            const top = Math.random() * 50;
+            const z = -Math.random() * 700;
+            const delay = Math.random() * 8;
+            const duration = 30 + Math.random() * 15;
+
+            img.style.left = `${left}vw`;
+            img.style.top = `${top}vh`;
+            img.style.animationDelay = `${delay}s`;
+            img.style.animationDuration = `${duration}s`;
+            img.style.transform = `translateZ(${z}px)`;
+
+            container.appendChild(img);
+        }
+
+        // Tạo hiệu ứng tim rơi
+        for (let i = 0; i < 60; i++) {
+            const heart = document.createElement("div");
+            heart.className = "falling-heart";
+            heart.textContent = "❤️";
+
+            const left = Math.random() * 100;
+            const top = Math.random() * 50;
+            const z = -Math.random() * 700;
+            const delay = Math.random() * 8;
+            const duration = 25 + Math.random() * 20;
+
+            heart.style.left = `${left}vw`;
+            heart.style.top = `${top}vh`;
+            heart.style.animationDelay = `${delay}s`;
+            heart.style.animationDuration = `${duration}s`;
+            heart.style.transform = `translateZ(${z}px)`;
+
+            container.appendChild(heart);
+        }
+
+        // Cho phép xoay theo chuột
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 30; // -15 đến 15 độ
+            const y = (e.clientY / window.innerHeight - 0.5) * 30; // -15 đến 15 độ
+            container.style.transform = `rotateX(${y}deg) rotateY(${-x}deg)`;
+        });
+    </script>
+</body>
+
+</html>
